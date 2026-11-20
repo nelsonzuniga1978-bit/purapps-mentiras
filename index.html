@@ -210,6 +210,25 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:16px;paddi
 .eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.4s}.eq i:nth-child(4){animation-delay:.1s}
 @keyframes eq{from{height:4px}to{height:18px}}
 .video.vert{max-width:300px;aspect-ratio:9/16}
+/* --- Escena 6: Lost Time --- */
+.lt{background:radial-gradient(90% 60% at 50% 45%,#2a2016,#0a0806 70%);color:#f4e7c8;text-align:center}
+.lt .statusbar{color:#e8d9b5}
+.lt-h{position:absolute;top:11%;left:0;right:0}
+.lt-h small{font:600 9px var(--mono);letter-spacing:.3em;color:var(--gold)}
+.lt-h div{font:700 22px Georgia,serif;font-style:italic;margin-top:4px}
+.watch{position:absolute;left:50%;top:50%;width:78%;aspect-ratio:1;transform:translate(-50%,-46%)}
+.watch svg{width:100%;height:100%;overflow:visible}
+.hand{transform-origin:100px 100px;transform-box:view-box}
+.hand.m{animation:handm 9s cubic-bezier(.2,.75,.2,1) infinite}
+.hand.h{animation:handh 9s cubic-bezier(.2,.75,.2,1) infinite}
+@keyframes handm{0%,14%{transform:rotate(0deg)}52%,100%{transform:rotate(2310deg)}}
+@keyframes handh{0%,14%{transform:rotate(0deg)}52%,100%{transform:rotate(582.5deg)}}
+.lt-down{position:absolute;inset:0;background:#000;display:grid;place-items:center;z-index:7;animation:ltdown 9s infinite}
+.lt-down span{font:600 10px var(--mono);letter-spacing:.3em;color:#555}
+@keyframes ltdown{0%,10%{opacity:1}16%,100%{opacity:0}}
+.lt-res{position:absolute;bottom:9%;left:0;right:0;opacity:0;animation:amres 9s infinite}
+.lt-res b{display:block;font:800 30px var(--display);color:var(--gold-hi);letter-spacing:.04em}
+.lt-res span{font-size:11px;color:#cdbf9d}
 /* MARQUEE */
 .marquee{position:relative;z-index:1;border-block:1px solid var(--line);overflow:hidden;padding:16px 0;background:rgba(22,16,40,.6)}
 .marquee div{display:flex;gap:40px;width:max-content;animation:marq 32s linear infinite;font:700 15px var(--display);letter-spacing:.2em;color:var(--muted)}
@@ -223,7 +242,7 @@ section{padding:100px 0}
 .sec-head p{color:var(--muted);max-width:26em}
 
 /* COLECCIÓN */
-.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.grid5{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .tile{position:relative;border:1px solid var(--line);border-radius:22px;padding:22px 18px 20px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.005));text-decoration:none;display:flex;flex-direction:column;gap:12px;transition:transform .3s,border-color .3s;overflow:hidden;min-height:250px}
 .tile:hover{transform:translateY(-6px);border-color:var(--gold)}
 .tile .n{font:600 12px var(--mono);color:var(--gold);letter-spacing:.14em}
@@ -419,6 +438,25 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
   </div>
 </template>
 
+<template id="s-lt">
+  <div class="scene lt">
+    <div class="statusbar"><span>19:25</span><span>●●● ▮</span></div>
+    <div class="lt-h"><small>LOST TIME</small><div>El tiempo perdido</div></div>
+    <div class="watch"><svg viewBox="0 0 200 200" aria-hidden="true">
+      <defs><radialGradient id="ltg" cx="35%" cy="30%"><stop offset="0" stop-color="#fff2c4"/><stop offset=".5" stop-color="#d9a84a"/><stop offset="1" stop-color="#6e4a14"/></radialGradient>
+      <radialGradient id="ltf" cx="45%" cy="40%"><stop offset="0" stop-color="#fbf3df"/><stop offset="1" stop-color="#e2d2a8"/></radialGradient></defs>
+      <rect x="88" y="-14" width="24" height="16" rx="5" fill="url(#ltg)"/><circle cx="100" cy="-20" r="11" fill="none" stroke="url(#ltg)" stroke-width="5"/>
+      <circle cx="100" cy="100" r="98" fill="url(#ltg)"/><circle cx="100" cy="100" r="86" fill="#5a3c12"/><circle cx="100" cy="100" r="82" fill="url(#ltf)"/>
+      <line x1="100" y1="24" x2="100" y2="33" stroke="#3b2a12" stroke-width="3" transform="rotate(0 100 100)"/><line x1="100" y1="27" x2="100" y2="31" stroke="#3b2a12" stroke-width="1.5" transform="rotate(30 100 100)"/><line x1="100" y1="27" x2="100" y2="31" stroke="#3b2a12" stroke-width="1.5" transform="rotate(60 100 100)"/><line x1="100" y1="24" x2="100" y2="33" stroke="#3b2a12" stroke-width="3" transform="rotate(90 100 100)"/><line x1="100" y1="27" x2="100" y2="31" stroke="#3b2a12" stroke-width="1.5" transform="rotate(120 100 100)"/><line x1="100" y1="27" x2="100" y2="31" stroke="#3b2a12" stroke-width="1.5" transform="rotate(150 100 100)"/><line x1="100" y1="24" x2="100" y2="33" stroke="#3b2a12" stroke-width="3" transform="rotate(180 100 100)"/><line x1="100" y1="27" x2="100" y2="31" stroke="#3b2a12" stroke-width="1.5" transform="rotate(210 100 100)"/><line x1="100" y1="27" x2="100" y2="31" stroke="#3b2a12" stroke-width="1.5" transform="rotate(240 100 100)"/><line x1="100" y1="24" x2="100" y2="33" stroke="#3b2a12" stroke-width="3" transform="rotate(270 100 100)"/><line x1="100" y1="27" x2="100" y2="31" stroke="#3b2a12" stroke-width="1.5" transform="rotate(300 100 100)"/><line x1="100" y1="27" x2="100" y2="31" stroke="#3b2a12" stroke-width="1.5" transform="rotate(330 100 100)"/><text x="100.0" y="50.0" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#3b2a12">XII</text><text x="156.0" y="106.0" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#3b2a12">III</text><text x="100.0" y="162.0" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#3b2a12">VI</text><text x="44.0" y="106.0" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#3b2a12">IX</text>
+      <g class="hand h"><path d="M100 104 L96 100 L100 52 L104 100 Z" fill="#1d1408"/></g>
+      <g class="hand m"><path d="M100 106 L98 100 L100 30 L102 100 Z" fill="#1d1408"/></g>
+      <circle cx="100" cy="100" r="5" fill="#b8893a"/>
+    </svg></div>
+    <div class="lt-res"><b>7:25</b><span>La hora elegida · fijada para siempre</span></div>
+    <div class="lt-down"><span>BOCA ABAJO</span></div>
+  </div>
+</template>
+
 <template id="s-cs">
   <div class="scene cs">
     <div class="lock"></div>
@@ -475,6 +513,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
       <a class="tile" href="#app-3"><span class="n">03</span><span class="ico i3">✎</span><h3>Garabatos</h3><p>Dibujan en su celular. Lo ves en el tuyo.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
       <a class="tile" href="#app-4"><span class="n">04</span><span class="ico i4">♌︎</span><h3>Astromágico</h3><p>El zodíaco elige una carta. Tú la sabías.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
       <a class="tile" href="#app-5"><span class="n">05</span><span class="ico i5" style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff;border:0">♪</span><h3>Top Songs Charts</h3><p>Eligen una canción del ranking. Tú decides la presentación.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
+      <a class="tile" href="#app-6"><span class="n">06</span><span class="ico i6" style="background:radial-gradient(circle at 35% 30%,#fff2c4,#d9a84a 55%,#6e4a14);color:#1d1408;font-family:Georgia,serif">◷</span><h3>Lost Time</h3><p>Un reloj de bolsillo que marca la hora elegida.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
     </div>
   </section>
 
@@ -583,6 +622,24 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
         <a class="btn btn-gold" href="#acceso" data-app="Top Songs Charts">Quiero esta app</a>
       </div>
     </div>
+      <div class="show" id="app-6">
+      <div class="show-phone"><div class="halo"></div><div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-lt"></div></div></div></div>
+      <div>
+        <span class="num">06</span>
+        <h3>Lost Time</h3>
+        <div class="kind">Reloj · predicción</div>
+        <p class="pitch">Un reloj de bolsillo antiguo en el celular del propio espectador. Lo deja boca abajo sobre la mesa y, al darlo vuelta, las agujas marcan exactamente la hora elegida.</p>
+        <ul class="feat">
+          <li><span><strong>El reloj está en el celular del espectador</strong>, no en el tuyo.</span></li>
+          <li><span><strong>La hora queda fija para siempre:</strong> puede mostrársela a sus amigos después.</span></li>
+          <li><span>Se instala en el iPhone del espectador con <strong>ícono propio</strong>.</span></li>
+          <li><span>Tu panel queda protegido con <strong>Authenticator</strong>.</span></li>
+        </ul>
+        <div class="chips"><span class="chip">2 celulares</span><span class="chip">Instalable</span><span class="chip">Close-up</span></div>
+        <div class="price"><b>$30.000</b><span>CLP · US$30</span></div>
+        <a class="btn btn-gold" href="#acceso" data-app="Lost Time">Quiero esta app</a>
+      </div>
+    </div>
   </section>
 
   <section id="acceso">
@@ -599,15 +656,15 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
     <div class="pack" id="pack">
       <div>
         <span class="badge">Oferta exclusiva</span>
-        <h3>Pack completo: las 5 apps.</h3>
-        <p>Toxonyq Momentum, SearchWord, Garabatos, Astromágico y Top Songs Charts, con sus instructivos.</p>
-        <div class="icons"><span class="i1">=</span><span class="i2" style="font-family:Georgia,serif">W</span><span class="i3">✎</span><span class="i4">♌︎</span><span style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff">♪</span></div>
+        <h3>Pack completo: las 6 apps.</h3>
+        <p>Toxonyq Momentum, SearchWord, Garabatos, Astromágico, Top Songs Charts y Lost Time, con sus instructivos.</p>
+        <div class="icons"><span class="i1">=</span><span class="i2" style="font-family:Georgia,serif">W</span><span class="i3">✎</span><span class="i4">♌︎</span><span style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff">♪</span><span style="background:radial-gradient(circle at 35% 30%,#fff2c4,#d9a84a 55%,#6e4a14);color:#1d1408;font-family:Georgia,serif">◷</span></div>
       </div>
       <div class="cost">
-        <div class="old">$150.000 CLP · US$150</div>
+        <div class="old">$180.000 CLP · US$180</div>
         <div class="now">$100.000</div>
         <div class="usd">CLP · US$100</div>
-        <a class="btn btn-gold" href="#f" data-app="Pack completo (5 apps)">Quiero el pack completo</a>
+        <a class="btn btn-gold" href="#f" data-app="Pack completo (6 apps)">Quiero el pack completo</a>
       </div>
     </div>
 
@@ -619,12 +676,13 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
       <form id="f" novalidate>
         <span id="pickLabel" style="font:600 12px var(--mono);letter-spacing:.14em;color:var(--gold)">APPS</span>
         <div class="pick" role="group" aria-labelledby="pickLabel">
-          <input type="checkbox" id="p0" value="Pack completo (5 apps)"><label for="p0">Pack completo · $100.000 / US$100</label>
+          <input type="checkbox" id="p0" value="Pack completo (6 apps)"><label for="p0">Pack completo · $100.000 / US$100</label>
           <input type="checkbox" id="p1" value="Toxonyq Momentum"><label for="p1">Toxonyq Momentum</label>
           <input type="checkbox" id="p2" value="SearchWord"><label for="p2">SearchWord</label>
           <input type="checkbox" id="p3" value="Garabatos"><label for="p3">Garabatos</label>
           <input type="checkbox" id="p4" value="Astromágico"><label for="p4">Astromágico</label>
           <input type="checkbox" id="p5" value="Top Songs Charts"><label for="p5">Top Songs Charts</label>
+          <input type="checkbox" id="p6" value="Lost Time"><label for="p6">Lost Time</label>
         </div>
         <label for="nm">Tu nombre artístico</label>
         <input type="text" id="nm" placeholder="Ej: Mago Aurelio" autocomplete="name">
@@ -682,7 +740,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
   document.querySelectorAll('.host[data-scene]').forEach(h=>mount(h, h.dataset.scene));
 
   /* Celular del héroe: rota entre las 5 apps */
-  const scenes = [['s-calc','Toxonyq Momentum'],['s-sw','SearchWord'],['s-gb','Garabatos'],['s-am','Astromágico'],['s-ts','Top Songs Charts']];
+  const scenes = [['s-calc','Toxonyq Momentum'],['s-sw','SearchWord'],['s-gb','Garabatos'],['s-am','Astromágico'],['s-ts','Top Songs Charts'],['s-lt','Lost Time']];
   const heroHost = document.querySelector('#heroScreen .host');
   const nameEl = document.getElementById('heroName');
   const dots = document.getElementById('dots');
