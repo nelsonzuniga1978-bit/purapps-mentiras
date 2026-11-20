@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Purapps Mentiras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Plan: escenario de teatro de noche. Fondo violeta casi negro, dorado de cartel antiguo, rojo brasa solo para corazones y alertas.
+   Layout: héroe con un celular 3D que rota por las apps → colección de 5 espacios → vitrina alternada (celular / texto) → acceso. */
+:root{
+  --ink:#08060f;
+  --velvet:#161028;
+  --line:#2c2342;
+  --gold:#e8c26a;
+  --gold-hi:#ffe2a3;
+  --text:#f4efe6;
+  --muted:#a69db8;
+  --ember:#ff5b4f;
+  --display:"Syne", "Arial Black", system-ui, sans-serif;
+  --body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ink);color:var(--text);overflow-x:hidden;overflow-x:clip;max-width:100%}
+html{touch-action:pan-y pinch-zoom}
+body{font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--display);line-height:1.02;text-wrap:balance;letter-spacing:-.02em}
+#dust{position:fixed;inset:0;width:100vw;max-width:100%;height:100%;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 0}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;letter-spacing:.18em;font-size:15px;text-decoration:none}
+.logo svg{width:30px;height:30px}
+.navlinks{display:flex;gap:26px;font-size:14px;color:var(--muted)}
+.navlinks a{text-decoration:none}
+.navlinks a:hover{color:var(--gold-hi)}
+.btn{display:inline-flex;align-items:center;gap:10px;font:700 15px/1 var(--body);padding:15px 22px;border-radius:999px;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:transform .2s, box-shadow .2s, background .2s}
+.btn-gold{background:linear-gradient(135deg,var(--gold-hi),var(--gold) 55%,#b8893a);color:#1a1205;box-shadow:0 10px 40px -10px rgba(232,194,106,.6)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 16px 50px -10px rgba(232,194,106,.8)}
+.btn-ghost{border-color:var(--line);color:var(--text);background:rgba(255,255,255,.02)}
+.btn-ghost:hover{border-color:var(--gold)}
+.nav-cta{padding:11px 18px;font-size:14px}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:40px;padding:40px 0 70px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font:600 12px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--gold)}
+.hero h1{font-size:clamp(34px,6.4vw,84px);font-weight:800;margin:22px 0 22px}
+.hero h1 .shine{background:linear-gradient(100deg,var(--gold) 20%,var(--gold-hi) 40%,#fff6dc 50%,var(--gold-hi) 60%,var(--gold) 80%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
+@keyframes shine{to{background-position:-250% 0}}
+.hero p.lead{font-size:19px;color:var(--muted);max-width:30em}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+.slots{display:flex;gap:10px;margin-top:38px;align-items:center;flex-wrap:wrap}
+.slot{width:38px;height:6px;border-radius:9px;background:var(--gold)}
+.slot.empty{background:transparent;border:1px dashed var(--gold);opacity:.7}
+.slots span{font:500 13px var(--mono);color:var(--muted);margin-left:8px}
+
+.stage{position:relative;display:grid;place-items:center;min-height:620px;perspective:1400px;overflow:hidden;overflow:clip}
+.halo{position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(232,194,106,.28),rgba(120,60,200,.12) 45%,transparent 70%);filter:blur(10px);animation:breathe 6s ease-in-out infinite}
+.ring{position:absolute;width:470px;height:470px;border-radius:50%;border:1px solid rgba(232,194,106,.25);animation:spin 40s linear infinite}
+.ring::after{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;border-radius:50%;background:var(--gold-hi);box-shadow:0 0 18px var(--gold)}
+.ring.r2{width:560px;height:560px;border-style:dashed;opacity:.5;animation-duration:70s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{50%{transform:scale(1.08);opacity:.8}}
+.tilt{transform-style:preserve-3d;transition:transform .25s ease-out;animation:float 7s ease-in-out infinite}
+@keyframes float{50%{translate:0 -14px}}
+.hero-label{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;font:500 13px var(--mono);color:var(--muted);white-space:nowrap}
+.hero-label b{color:var(--gold-hi);font-weight:600}
+.dots{display:flex;gap:7px;margin-left:10px}
+.dots button{width:8px;height:8px;border-radius:50%;border:0;background:var(--line);cursor:pointer;padding:0}
+.dots button.on{background:var(--gold);box-shadow:0 0 10px var(--gold)}
+
+/* PHONE */
+.phone{--w:290px;width:var(--w);aspect-ratio:9/19.3;border-radius:calc(var(--w)*.16);padding:calc(var(--w)*.035);background:linear-gradient(145deg,#3a3448,#0d0b14 40%,#1d1928);box-shadow:0 0 0 1px #4a4258 inset,0 40px 90px -20px rgba(0,0,0,.9),0 0 80px -20px rgba(232,194,106,.35);position:relative}
+.phone::before{content:"";position:absolute;right:-3px;top:28%;width:3px;height:16%;border-radius:0 3px 3px 0;background:#2a2535}
+.screen{position:relative;width:100%;height:100%;border-radius:calc(var(--w)*.13);overflow:hidden;background:#000;isolation:isolate}
+.island{position:absolute;top:2.2%;left:50%;transform:translateX(-50%);width:31%;height:3.6%;border-radius:20px;background:#000;z-index:20}
+.glare{position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.09) 48%,transparent 56%);background-size:300% 100%;animation:glare 7s ease-in-out infinite;z-index:19;pointer-events:none}
+@keyframes glare{0%,60%{background-position:120% 0}100%{background-position:-120% 0}}
+.scene{position:absolute;inset:0;font-family:var(--body)}
+.statusbar{position:absolute;top:0;left:0;right:0;height:9%;display:flex;justify-content:space-between;align-items:center;padding:0 9% 0 10%;font:600 11px var(--body);z-index:5}
+
+/* --- Escena 1: calculadora --- */
+.calc{background:#000;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:0 6% 9%}
+.calc .disp{position:relative;height:96px;margin-bottom:10px}
+.calc .disp span{position:absolute;right:4px;bottom:0;font:300 40px/1 -apple-system,"Helvetica Neue",var(--body);white-space:nowrap;opacity:0;animation:step 10s infinite both}
+.calc .disp span.small{font-size:24px;bottom:50px;color:#9a9a9a}
+.calc .disp .final{color:var(--gold-hi);text-shadow:0 0 22px rgba(232,194,106,.8);font-weight:400}
+.calc .disp em{position:absolute;right:4px;bottom:48px;font:500 11px var(--mono);font-style:normal;color:var(--gold);opacity:0;animation:stepLast 10s infinite both;animation-delay:7.5s;letter-spacing:.1em}
+@keyframes step{0%{opacity:0;transform:translateY(6px)}2%{opacity:1;transform:none}23%{opacity:1}25%{opacity:0}100%{opacity:0}}
+@keyframes stepLast{0%{opacity:0}3%{opacity:1}22%{opacity:1}25%{opacity:0}100%{opacity:0}}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.k{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font:400 22px -apple-system,"Helvetica Neue",var(--body);background:#333}
+.k.f{background:#a5a5a5;color:#000;font-size:18px}
+.k.o{background:#ff9f0a;font-size:25px}
+.k.z{grid-column:span 2;aspect-ratio:auto;border-radius:40px;justify-content:start;padding-left:22%}
+.k.flash{animation:keyflash 10s infinite}
+@keyframes keyflash{0%,1%{filter:none}1.5%{filter:brightness(1.8)}3%,100%{filter:none}}
+
+/* --- Escena 2: SearchWord --- */
+.sw{background:#f6f4ee;color:#14213d}
+.sw .statusbar{color:#fff}
+.sw-top{background:#14213d;color:#fff;padding:13% 7% 6%}
+.sw-brand{font:700 15px Georgia,serif;letter-spacing:.02em}
+.sw-brand i{color:var(--gold);font-style:normal}
+.sw-sub{font-size:9px;color:#b9c2d8;letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
+.sw-count{float:right;font:600 9px var(--mono);color:var(--gold);margin-top:-26px;text-align:right}
+.sw-search{margin-top:12px;background:#fff;border-radius:10px;height:34px;display:flex;align-items:center;padding:0 10px;gap:8px;color:#14213d}
+.sw-search svg{width:14px;height:14px;flex:none}
+.typed{font:500 14px var(--mono);overflow:hidden;white-space:nowrap;width:0;border-right:2px solid #14213d;animation:type 9s steps(8) infinite}
+@keyframes type{0%,8%{width:0}30%,100%{width:8ch}}
+.sw-body{padding:7%;opacity:0;animation:article 9s infinite}
+@keyframes article{0%,34%{opacity:0;transform:translateY(10px)}40%,92%{opacity:1;transform:none}100%{opacity:0}}
+.sw-body h4{font:700 24px Georgia,serif;border-bottom:1px solid #d6cfbd;padding-bottom:6px;margin-bottom:10px}
+.sw-body p{font:13px/1.55 Georgia,serif;color:#38425a}
+.sw-body p a{color:#2a5bd7;text-decoration:none}
+.sw-img{height:70px;border-radius:8px;margin:12px 0;background:linear-gradient(135deg,#f2b33d,#e0663a 50%,#3c2a6b);position:relative;overflow:hidden}
+.sw-img::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(255,255,255,.35) 0 14px,transparent 15px),radial-gradient(circle at 46% 50%,rgba(255,255,255,.35) 0 14px,transparent 15px)}
+.toast{position:absolute;left:6%;right:6%;bottom:5%;background:#0b0b10;color:#fff;border:1px solid var(--gold);border-radius:14px;padding:10px 12px;display:flex;gap:10px;align-items:center;font-size:11px;transform:translateY(140%);animation:toast 9s infinite;z-index:6}
+.toast b{display:block;color:var(--gold-hi);font:700 15px var(--display);letter-spacing:.08em}
+.toast .ic{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--gold-hi),var(--gold));flex:none}
+@keyframes toast{0%,52%{transform:translateY(140%)}58%,90%{transform:none}96%,100%{transform:translateY(140%)}}
+
+/* --- Escena 3: Garabatos --- */
+.gb{background:#fffdf7;color:#222}
+.gb .statusbar{color:#222}
+.gb-bar{position:absolute;top:10%;left:6%;right:6%;display:flex;justify-content:space-between;align-items:center}
+.gb-title{border-bottom:2px solid #222;font:700 18px "Comic Sans MS","Chalkboard SE",var(--body);min-width:90px;padding:0 4px}
+.gb-title .t{display:inline-block;overflow:hidden;white-space:nowrap;width:0;vertical-align:bottom;animation:gbtype 9s steps(4) infinite}
+@keyframes gbtype{0%,4%{width:0}14%,100%{width:4ch}}
+.gb-pal{display:flex;gap:6px}
+.gb-pal i{width:16px;height:16px;border-radius:50%;display:block}
+.gb-canvas{position:absolute;top:22%;left:6%;right:6%;bottom:16%;border-radius:16px;background:#fff;box-shadow:0 0 0 1px #ece6d6 inset;background-image:radial-gradient(#eee4cc 1px,transparent 1px);background-size:14px 14px}
+.gb-canvas svg,.gb-recv svg{width:100%;height:100%}
+.draw path,.draw circle{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 9s infinite}
+.draw .d2{animation-name:draw2}
+.draw .d3{animation-name:draw3}
+@keyframes draw{0%,14%{stroke-dashoffset:1}38%,100%{stroke-dashoffset:0}}
+@keyframes draw2{0%,36%{stroke-dashoffset:1}44%,100%{stroke-dashoffset:0}}
+@keyframes draw3{0%,43%{stroke-dashoffset:1}47%,100%{stroke-dashoffset:0}}
+.gb-tools{position:absolute;bottom:5%;left:0;right:0;display:flex;justify-content:center;gap:14px}
+.gb-tools i{width:34px;height:34px;border-radius:50%;background:#f0ead9;display:block}
+.gb-recv{position:absolute;inset:0;background:#000;opacity:0;animation:recv 9s infinite;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.gb-recv svg{width:80%;height:auto}
+.gb-recv svg *{stroke:#d9d9d9;fill:none;stroke-width:3;stroke-linecap:round}
+.gb-recv small{position:absolute;bottom:7%;font:500 9px var(--mono);color:#555;letter-spacing:.12em}
+@keyframes recv{0%,56%{opacity:0}61%,92%{opacity:1}97%,100%{opacity:0}}
+
+/* --- Escena 4: Astromágico --- */
+.am{background:radial-gradient(120% 80% at 50% 0%,#3a1d6e,#120a26 60%,#07040f);color:#fff;text-align:center}
+.am .statusbar{color:#fff}
+.am-h{position:absolute;top:13%;left:0;right:0}
+.am-h small{font:600 9px var(--mono);letter-spacing:.3em;color:var(--gold)}
+.am-h div{font:700 22px var(--display);margin-top:6px}
+.am-wheel{position:absolute;top:31%;left:50%;width:150%;transform:translateX(-50%);height:34%;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent);mask:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent)}
+.reel{display:flex;gap:12px;position:absolute;top:8%;left:50%;animation:reel 9s cubic-bezier(.12,.75,.2,1) infinite}
+@keyframes reel{0%,8%{transform:translateX(-50px)}52%,100%{transform:translateX(calc(-50px - 13 * 112px))}}
+.card{width:100px;height:140px;flex:none;border-radius:12px;background:#fbf7ee;color:#1c1c1c;display:flex;flex-direction:column;justify-content:space-between;padding:8px 10px;box-shadow:0 10px 24px rgba(0,0,0,.5);font:700 20px Georgia,serif;text-align:left}
+.card.red{color:#c8231c}
+.card .z{align-self:center;font-size:34px;font-weight:400;color:#6c4bb6}
+.card .b{align-self:flex-end;transform:rotate(180deg)}
+.card.win{box-shadow:0 0 0 2px var(--gold),0 0 40px rgba(232,194,106,.9)}
+.am-pointer{position:absolute;top:29.5%;left:50%;transform:translateX(-50%);width:0;height:0;border:9px solid transparent;border-top-color:var(--gold);z-index:4}
+.am-res{position:absolute;bottom:13%;left:0;right:0;opacity:0;animation:amres 9s infinite}
+.am-res b{display:block;font:800 21px var(--display);color:var(--gold-hi)}
+.am-res span{font-size:12px;color:#c9bde6}
+@keyframes amres{0%,54%{opacity:0;transform:translateY(8px)}60%,94%{opacity:1;transform:none}100%{opacity:0}}
+.am-zod{position:absolute;bottom:4.5%;left:0;right:0;font-size:13px;letter-spacing:.35em;color:rgba(232,194,106,.5)}
+
+/* --- Escena 5: próximamente --- */
+.cs{background:radial-gradient(circle at 50% 42%,#2a2040,#08060f 65%);display:grid;place-items:center;text-align:center}
+.cs .q{font:800 150px/1 var(--display);background:linear-gradient(180deg,var(--gold-hi),var(--gold) 50%,#6e4f1a);-webkit-background-clip:text;background-clip:text;color:transparent;animation:breathe 3.5s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(232,194,106,.4))}
+.cs small{display:block;font:600 10px var(--mono);letter-spacing:.3em;color:var(--gold);margin-top:10px}
+.cs p{font:700 17px var(--display);color:#fff;margin-top:8px}
+.cs .lock{position:absolute;inset:0;background:repeating-linear-gradient(120deg,transparent 0 22px,rgba(232,194,106,.04) 22px 23px)}
+
+/* --- Escena 5: Top Songs Charts --- */
+.ts{background:linear-gradient(180deg,#1c1530,#0b0a10 45%);color:#fff}
+.ts .statusbar{color:#fff}
+.ts-h{position:absolute;top:10%;left:7%;right:7%}
+.ts-h small{font:600 9px var(--mono);letter-spacing:.24em;color:#ff4d6d}
+.ts-h div{font:800 21px var(--display);margin-top:3px}
+.ts-h p{font-size:10px;color:#9b95ad}
+.ts-list{position:absolute;top:29%;left:4%;right:4%;bottom:17%;overflow:hidden;-webkit-mask:linear-gradient(transparent,#000 22%,#000 78%,transparent);mask:linear-gradient(transparent,#000 22%,#000 78%,transparent)}
+.ts-band{position:absolute;left:0;right:0;top:50%;height:50px;transform:translateY(-50%);border-radius:12px;border:1px solid rgba(255,77,109,.0);animation:band 9s infinite}
+@keyframes band{0%,50%{border-color:transparent;background:transparent}55%,92%{border-color:#ff4d6d;background:rgba(255,77,109,.12)}100%{border-color:transparent}}
+.ts-strip{position:absolute;left:0;right:0;top:50%;margin-top:-25px;animation:tsroll 9s cubic-bezier(.15,.7,.2,1) infinite}
+@keyframes tsroll{0%,8%{transform:translateY(0)}50%,100%{transform:translateY(-700px)}}
+.row{height:50px;display:flex;align-items:center;gap:10px;padding:0 10px}
+.row .r{font:700 12px var(--mono);color:#8c86a0;width:26px}
+.row .cv{width:32px;height:32px;border-radius:6px;flex:none}
+.row .tt{flex:1;min-width:0;line-height:1.2}
+.row .tt b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .tt span{font-size:10px;color:#9b95ad}
+.row .hz{width:15px;height:15px;flex:none;color:#cfcbe0}
+.ts-play{position:absolute;left:6%;right:6%;bottom:5%;background:#0b0b10;border:1px solid #ff4d6d;border-radius:14px;padding:9px 12px;display:flex;gap:10px;align-items:center;font-size:10px;color:#bbb;transform:translateY(150%);animation:toast 9s infinite;z-index:6}
+.ts-play b{display:block;color:#fff;font-size:12px}
+.eq{display:flex;gap:2px;align-items:flex-end;height:18px;flex:none}
+.eq i{width:3px;background:#ff4d6d;border-radius:2px;animation:eq .8s ease-in-out infinite alternate}
+.eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.4s}.eq i:nth-child(4){animation-delay:.1s}
+@keyframes eq{from{height:4px}to{height:18px}}
+.video.vert{max-width:300px;aspect-ratio:9/16}
+/* MARQUEE */
+.marquee{position:relative;z-index:1;border-block:1px solid var(--line);overflow:hidden;padding:16px 0;background:rgba(22,16,40,.6)}
+.marquee div{display:flex;gap:40px;width:max-content;animation:marq 32s linear infinite;font:700 15px var(--display);letter-spacing:.2em;color:var(--muted)}
+.marquee span::after{content:"✦";color:var(--gold);margin-left:40px}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+section{padding:100px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:30px;flex-wrap:wrap;margin-bottom:50px}
+.sec-head h2{font-size:clamp(36px,5vw,62px);max-width:12em}
+.sec-head p{color:var(--muted);max-width:26em}
+
+/* COLECCIÓN */
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.tile{position:relative;border:1px solid var(--line);border-radius:22px;padding:22px 18px 20px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.005));text-decoration:none;display:flex;flex-direction:column;gap:12px;transition:transform .3s,border-color .3s;overflow:hidden;min-height:250px}
+.tile:hover{transform:translateY(-6px);border-color:var(--gold)}
+.tile .n{font:600 12px var(--mono);color:var(--gold);letter-spacing:.14em}
+.tile .ico{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font:700 26px var(--display)}
+.tile h3{font-size:21px}
+.tile p{font-size:14px;color:var(--muted);line-height:1.5}
+.tile .tag{margin-top:auto;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-hi)}
+.tile.soon{border-style:dashed}
+.tile.soon .tag{color:var(--muted)}
+.i1{background:linear-gradient(145deg,#ffb340,#ff9f0a);color:#000}
+.i2{background:#14213d;color:var(--gold);font-family:Georgia,serif !important}
+.i3{background:#fffdf7;color:#222}
+.i4{background:linear-gradient(145deg,#5b2fb0,#1c0f3c);color:var(--gold-hi)}
+.i5{border:1px dashed var(--gold);color:var(--gold)}
+
+/* VITRINA */
+.show{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;padding:70px 0;border-top:1px solid var(--line)}
+.show:nth-child(even) .show-phone{order:2}
+.show-phone{position:relative;display:grid;place-items:center;padding:30px 0;overflow:hidden;overflow:clip}
+.show-phone .halo{width:420px;height:420px}
+.show-phone .phone{--w:270px}
+.num{font:800 120px/0.8 var(--display);color:transparent;-webkit-text-stroke:1px rgba(232,194,106,.45);display:block;margin-bottom:-28px}
+.show h3{font-size:clamp(34px,4.4vw,52px);margin:0 0 6px;position:relative}
+.show .kind{font:600 12px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:22px}
+.show .pitch{font-size:19px;color:var(--text);margin-bottom:24px;max-width:28em}
+.feat{list-style:none;display:grid;gap:12px;margin-bottom:30px}
+.feat li{display:flex;gap:12px;color:var(--muted);font-size:16px}
+.feat li::before{content:"";flex:none;width:7px;height:7px;margin-top:9px;transform:rotate(45deg);background:var(--gold)}
+.feat strong{color:var(--text);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.chip{font:500 12px var(--mono);border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--muted)}
+
+.video{position:relative;width:100%;max-width:520px;aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:1px solid rgba(232,194,106,.4);box-shadow:0 20px 60px -20px rgba(0,0,0,.9);margin-bottom:28px;background:#000}
+.video{display:block;text-decoration:none;background:radial-gradient(circle at 50% 40%,#3a1d6e,#0b0812 70%)}
+.video img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75;transition:opacity .3s,transform .4s}
+.video:hover img{opacity:.95;transform:scale(1.03)}
+.video .play{position:absolute;top:50%;left:50%;width:74px;height:74px;margin:-37px 0 0 -37px;border-radius:50%;background:linear-gradient(135deg,var(--gold-hi),var(--gold));display:grid;place-items:center;box-shadow:0 0 0 10px rgba(232,194,106,.18),0 10px 40px rgba(0,0,0,.6);animation:breathe 2.6s ease-in-out infinite}
+.video .play svg{width:30px;height:30px;fill:#1a1205;margin-left:4px}
+.video .vlabel{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 12px;background:linear-gradient(transparent,rgba(0,0,0,.85));font:700 14px var(--body);color:#fff;text-align:center}
+.video-cap{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:block}
+/* PRECIOS */
+.price{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.price b{font:800 34px var(--display);color:var(--gold-hi);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.price span{font:600 15px var(--mono);color:var(--muted)}
+.tile .tag b{font-weight:700}
+.pack{margin-top:60px;position:relative;overflow:hidden;border-radius:32px;padding:44px;border:1px solid var(--gold);background:radial-gradient(90% 120% at 100% 0%,rgba(255,77,109,.18),transparent 60%),radial-gradient(90% 120% at 0% 100%,rgba(232,194,106,.2),transparent 60%),var(--velvet);display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+.pack .badge{display:inline-block;font:700 11px var(--mono);letter-spacing:.2em;text-transform:uppercase;background:var(--ember);color:#fff;padding:7px 12px;border-radius:999px;margin-bottom:16px}
+.pack h3{font-size:clamp(30px,4vw,46px);margin-bottom:10px}
+.pack p{color:var(--muted)}
+.pack .icons{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+.pack .icons span{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font:700 20px var(--display)}
+.pack .cost{text-align:left}
+.pack .old{font:500 16px var(--mono);color:var(--muted);text-decoration:line-through}
+.pack .now{font:800 clamp(44px,6vw,64px)/1 var(--display);color:var(--gold-hi);margin:6px 0;font-variant-numeric:tabular-nums}
+.pack .usd{font:600 18px var(--mono);color:var(--text);margin-bottom:20px}
+@media (max-width:980px){.pack{grid-template-columns:1fr;padding:32px 24px}}
+/* ACCESO */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{border:1px solid var(--line);border-radius:22px;padding:28px;background:var(--velvet)}
+.step b{font:800 44px var(--display);color:var(--gold);display:block;margin-bottom:14px}
+.step h4{font:700 20px var(--display);margin-bottom:8px}
+.step p{color:var(--muted);font-size:15px}
+.cta{margin-top:70px;border-radius:32px;padding:56px;background:radial-gradient(100% 140% at 0% 0%,rgba(232,194,106,.22),transparent 55%),linear-gradient(135deg,#1d1433,#0d0918);border:1px solid rgba(232,194,106,.35);display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.cta h2{font-size:clamp(32px,4.2vw,52px);margin-bottom:14px}
+.cta p{color:var(--muted)}
+form{display:grid;gap:14px}
+label{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+input[type=text]{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:14px;padding:14px 16px;color:var(--text);font:16px var(--body)}
+input[type=text]:focus{border-color:var(--gold);outline:none}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick input{position:absolute;opacity:0;pointer-events:none}
+.pick label{font:500 14px var(--body);letter-spacing:0;text-transform:none;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;transition:.2s}
+.pick input:checked + label{background:var(--gold);color:#1a1205;border-color:var(--gold)}
+.pick input:focus-visible + label{outline:2px solid var(--gold);outline-offset:2px}
+.msg{font:14px/1.5 var(--mono);background:rgba(0,0,0,.4);border:1px dashed var(--line);border-radius:14px;padding:14px;color:var(--muted);min-height:70px;white-space:pre-wrap}
+.ok{font-size:14px;color:var(--gold-hi);min-height:20px}
+footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:100px}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr;text-align:left}
+  .stage{min-height:600px}
+  .grid5{grid-template-columns:repeat(2,1fr)}
+  .show{grid-template-columns:1fr;gap:20px}
+  .show:nth-child(even) .show-phone{order:0}
+  .steps{grid-template-columns:1fr}
+  .cta{grid-template-columns:1fr;padding:34px 24px}
+  .navlinks{display:none}
+  .logo{font-size:13px;letter-spacing:.1em}
+  .hero-label{white-space:normal;justify-content:center;flex-wrap:wrap;width:100%;text-align:center}
+}
+@media (max-width:520px){
+  .wrap{padding:0 18px}
+  .grid5{grid-template-columns:1fr}
+  .halo{width:340px;height:340px}.ring{width:330px;height:330px}.ring.r2{width:380px;height:380px}
+  .phone{--w:250px}
+  .stage{min-height:560px}
+  section{padding:70px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .calc .disp .final,.calc .disp em,.sw-body,.am-res,.toast{opacity:1 !important;transform:none !important}
+  .typed{width:8ch}.gb-title .t{width:4ch}
+  .draw path,.draw circle{stroke-dashoffset:0}
+  .reel{transform:translateX(calc(-50px - 13 * 112px))}
+}
+</style>
+</head>
+<body>
+<canvas id="dust" aria-hidden="true"></canvas>
+
+<!-- ============ PLANTILLAS DE PANTALLAS ============ -->
+<template id="s-calc">
+  <div class="scene calc">
+    <div class="statusbar"><span>14:41</span><span>●●● ▮</span></div>
+    <div class="disp">
+      <span style="animation-delay:0s">2026</span>
+      <span style="animation-delay:2.5s"><small style="font-size:26px">2026 × </small>47</span>
+      <span style="animation-delay:5s">95.222 × 38</span>
+      <span class="final" style="animation-delay:7.5s">14411911</span>
+      <em>14:41 · 19/11</em>
+    </div>
+    <div class="keys">
+      <div class="k f">AC</div><div class="k f">+/−</div><div class="k f">%</div><div class="k o">÷</div>
+      <div class="k">7</div><div class="k">8</div><div class="k">9</div><div class="k o flash" style="animation-delay:2.4s">×</div>
+      <div class="k">4</div><div class="k">5</div><div class="k">6</div><div class="k o">−</div>
+      <div class="k">1</div><div class="k">2</div><div class="k">3</div><div class="k o">+</div>
+      <div class="k z">0</div><div class="k">,</div><div class="k o flash" style="animation-delay:7.4s">=</div>
+    </div>
+  </div>
+</template>
+
+<template id="s-sw">
+  <div class="scene sw">
+    <div class="statusbar"><span>14:41</span><span>●●● ▮</span></div>
+    <div class="sw-top">
+      <div class="sw-brand">Search<i>Word</i></div>
+      <div class="sw-sub">La enciclopedia libre</div>
+      <div class="sw-count">Consultas de hoy<br>2.847</div>
+      <div class="sw-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span class="typed">mariposa</span></div>
+    </div>
+    <div class="sw-body">
+      <h4>Mariposa</h4>
+      <p>Las mariposas son insectos del orden <a>Lepidoptera</a>, conocidos por sus alas cubiertas de escamas de colores.</p>
+      <div class="sw-img"></div>
+      <p>Habitan en todos los continentes salvo la <a>Antártida</a> y cumplen un papel clave en la <a>polinización</a>.</p>
+    </div>
+    <div class="toast"><div class="ic"></div><div>Receptor del mago<b>MARIPOSA</b></div></div>
+  </div>
+</template>
+
+<template id="s-gb">
+  <div class="scene gb">
+    <div class="statusbar"><span>14:41</span><span>●●● ▮</span></div>
+    <div class="gb-bar">
+      <div class="gb-title"><span class="t">Pato</span></div>
+      <div class="gb-pal"><i style="background:#222"></i><i style="background:#ff5b4f"></i><i style="background:#2f80ff"></i><i style="background:#f5b800"></i></div>
+    </div>
+    <div class="gb-canvas">
+      <svg class="draw" viewBox="0 0 280 260" aria-hidden="true">
+        <path pathLength="1" stroke="#222" stroke-width="4" d="M60 150 C60 110 120 100 150 122 C158 95 150 72 175 66 C200 60 216 80 206 100 L232 106 L206 113 C200 126 190 132 186 142 C220 142 242 162 226 188 C206 218 90 218 70 192 C60 178 58 165 60 150 Z"/>
+        <path class="d2" pathLength="1" stroke="#ff5b4f" stroke-width="4" d="M105 168 C128 150 165 155 176 178"/>
+        <circle class="d3" pathLength="1" stroke="#222" stroke-width="4" cx="186" cy="84" r="4"/>
+      </svg>
+    </div>
+    <div class="gb-tools"><i></i><i></i><i></i></div>
+    <div class="gb-recv">
+      <svg viewBox="0 0 280 260" aria-hidden="true">
+        <path d="M60 150 C60 110 120 100 150 122 C158 95 150 72 175 66 C200 60 216 80 206 100 L232 106 L206 113 C200 126 190 132 186 142 C220 142 242 162 226 188 C206 218 90 218 70 192 C60 178 58 165 60 150 Z"/>
+        <path d="M105 168 C128 150 165 155 176 178"/><circle cx="186" cy="84" r="4"/>
+      </svg>
+      <small>CELULAR DEL MAGO · PANTALLA NEGRA</small>
+    </div>
+  </div>
+</template>
+
+<template id="s-am">
+  <div class="scene am">
+    <div class="statusbar"><span>14:41</span><span>●●● ▮</span></div>
+    <div class="am-h"><small>ASTROMÁGICO</small><div>Tu carta del destino</div></div>
+    <div class="am-pointer"></div>
+    <div class="am-wheel"><div class="reel" data-reel></div></div>
+    <div class="am-res"><b>7 de corazones</b><span>Leo · nacido un 4 de agosto</span></div>
+    <div class="am-zod">♈︎♉︎♊︎♋︎♌︎♍︎♎︎♏︎♐︎♑︎♒︎♓︎</div>
+  </div>
+</template>
+
+<template id="s-ts">
+  <div class="scene ts">
+    <div class="statusbar"><span>14:41</span><span>●●● ▮</span></div>
+    <div class="ts-h"><small>TOP SONGS CHARTS</small><div>Top 100 de la historia</div><p>Las canciones más escuchadas de todos los tiempos</p></div>
+    <div class="ts-list"><div class="ts-band"></div><div class="ts-strip" data-songs></div></div>
+    <div class="ts-play"><div class="eq"><i></i><i></i><i></i><i></i></div><div>Celular del mago · sonando<b>Bohemian Rhapsody · Queen</b></div></div>
+  </div>
+</template>
+
+<template id="s-cs">
+  <div class="scene cs">
+    <div class="lock"></div>
+    <div><div class="q">?</div><small>NUEVA APP</small><p>Próximamente</p></div>
+  </div>
+</template>
+
+<!-- ============ PÁGINA ============ -->
+<div class="wrap">
+  <nav>
+    <a class="logo" href="#top" aria-label="Purapps Mentiras, inicio">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 2 L19.5 12.5 L30 16 L19.5 19.5 L16 30 L12.5 19.5 L2 16 L12.5 12.5 Z" fill="url(#lg)"/><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe2a3"/><stop offset="1" stop-color="#b8893a"/></linearGradient></defs></svg>
+      <span>PUR<span style="color:var(--gold)">APPS</span> MENTIRAS</span>
+    </a>
+    <div class="navlinks"><a href="#coleccion">Colección</a><a href="#apps">Las apps</a><a href="#acceso">Acceso</a></div>
+    <a class="btn btn-gold nav-cta" href="#acceso">Pedir acceso</a>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <span class="eyebrow">Purapps Mentiras · la pureza de mentir</span>
+      <h1>Aplicaciones mágicas <span class="shine">de última generación.</span></h1>
+      <p class="lead">Herramientas de magia y mentalismo para el celular. Se ven como apps comunes en las manos del espectador y trabajan para ti en silencio.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="#apps">Ver las apps en acción</a>
+        <a class="btn btn-ghost" href="#acceso">Cómo obtenerlas</a>
+      </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="halo"></div><div class="ring"></div><div class="ring r2"></div>
+      <div class="tilt" id="tilt">
+        <div class="phone"><div class="screen" id="heroScreen"><div class="island"></div><div class="glare"></div><div class="host"></div></div></div>
+      </div>
+      <div class="hero-label">Ahora: <b id="heroName">Toxonyq Momentum</b><div class="dots" id="dots"></div></div>
+    </div>
+  </header>
+</div>
+
+<div class="marquee" aria-hidden="true"><div>
+  <span>MENTALISMO</span><span>PANTALLA NEGRA</span><span>FORZAJE</span><span>RECEPTOR SECRETO</span><span>INSTALABLE</span><span>MESA A MESA</span><span>DOS CELULARES</span>
+  <span>MENTALISMO</span><span>PANTALLA NEGRA</span><span>FORZAJE</span><span>RECEPTOR SECRETO</span><span>INSTALABLE</span><span>MESA A MESA</span><span>DOS CELULARES</span>
+</div></div>
+
+<main class="wrap">
+  <section id="coleccion">
+    <div class="sec-head">
+      <h2>El catálogo.</h2>
+      <p>Apps de última generación para artistas del misterio.</p>
+    </div>
+    <div class="grid5">
+      <a class="tile" href="#app-1"><span class="n">01</span><span class="ico i1">=</span><h3>Toxonyq Momentum</h3><p>La calculadora que predice la hora exacta.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
+      <a class="tile" href="#app-2"><span class="n">02</span><span class="ico i2">W</span><h3>SearchWord</h3><p>Una enciclopedia que te muestra lo que buscaron.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
+      <a class="tile" href="#app-3"><span class="n">03</span><span class="ico i3">✎</span><h3>Garabatos</h3><p>Dibujan en su celular. Lo ves en el tuyo.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
+      <a class="tile" href="#app-4"><span class="n">04</span><span class="ico i4">♌︎</span><h3>Astromágico</h3><p>El zodíaco elige una carta. Tú la sabías.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
+      <a class="tile" href="#app-5"><span class="n">05</span><span class="ico i5" style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff;border:0">♪</span><h3>Top Songs Charts</h3><p>Eligen una canción del ranking. Tú decides la presentación.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
+    </div>
+  </section>
+
+  <section id="apps" style="padding-top:20px">
+    <div class="show" id="app-1">
+      <div class="show-phone"><div class="halo"></div><div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-calc"></div></div></div></div>
+      <div>
+        <span class="num">01</span>
+        <h3>Toxonyq Momentum</h3>
+        <div class="kind">Calculadora · predicción</div>
+        <p class="pitch">Es idéntica a la calculadora del iPhone. El público multiplica números que eligen ellos mismos y el resultado es la hora y la fecha exactas del momento.</p>
+        <ul class="feat">
+          <li><span><strong>Tres modos:</strong> Momentum, Número personal y Peek.</span></li>
+          <li><span><strong>Cualquier número</strong> que tú decidas puede ser el resultado final.</span></li>
+          <li><span><strong>Se reinicia en un toque</strong>, ideal para hacerlo mesa a mesa.</span></li>
+          <li><span>Protegida con <strong>clave de activación</strong>.</span></li>
+        </ul>
+        <div class="chips"><span class="chip">1 celular</span><span class="chip">iPhone · Android</span><span class="chip">Close-up</span></div>
+        <span class="video-cap">Mira cómo funciona</span>
+        <a class="video vert" href="https://www.youtube.com/shorts/Fe976J1oHRg" target="_blank" rel="noopener" aria-label="Toxonyq Momentum: instructivo en video (abre YouTube)"><img src="https://i.ytimg.com/vi/Fe976J1oHRg/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlabel">Ver el video en YouTube</span></a>
+        <div class="price"><b>$30.000</b><span>CLP · US$30</span></div>
+        <a class="btn btn-gold" href="#acceso" data-app="Toxonyq Momentum">Quiero esta app</a>
+      </div>
+    </div>
+
+    <div class="show" id="app-2">
+      <div class="show-phone"><div class="halo"></div><div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-sw"></div></div></div></div>
+      <div>
+        <span class="num">02</span>
+        <h3>SearchWord</h3>
+        <div class="kind">Enciclopedia · mentalismo</div>
+        <p class="pitch">Una enciclopedia de verdad, con artículos reales. El espectador busca cualquier palabra en privado y tú la nombras sin haber visto su pantalla.</p>
+        <ul class="feat">
+          <li><span><strong>Dos efectos</strong> en la misma app.</span></li>
+          <li><span><strong>Receptor privado</strong> en tu celular, conectado en tiempo real.</span></li>
+          <li><span>Remate con <strong>Google Imágenes</strong> listo para mostrar.</span></li>
+          <li><span>Con <strong>dominio propio</strong> y acceso por código que cambia cada 30 segundos.</span></li>
+        </ul>
+        <div class="chips"><span class="chip">2 celulares</span><span class="chip">Instalable</span><span class="chip">Escenario · close-up</span></div>
+        <span class="video-cap">Mira cómo funciona</span>
+        <a class="video" href="https://youtu.be/uHCRDu_FFL4" target="_blank" rel="noopener" aria-label="SearchWord: instructivo en video (abre YouTube)"><img src="https://i.ytimg.com/vi/uHCRDu_FFL4/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlabel">Ver el video en YouTube</span></a>
+        <div class="price"><b>$30.000</b><span>CLP · US$30</span></div>
+        <a class="btn btn-gold" href="#acceso" data-app="SearchWord">Quiero esta app</a>
+      </div>
+    </div>
+
+    <div class="show" id="app-3">
+      <div class="show-phone"><div class="halo"></div><div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-gb"></div></div></div></div>
+      <div>
+        <span class="num">03</span>
+        <h3>Garabatos</h3>
+        <div class="kind">Dibujo · telepatía</div>
+        <p class="pitch">Le entregas una app de dibujo inocente. El espectador dibuja lo que quiera y el dibujo aparece en tu celular, que está guardado y parece apagado.</p>
+        <ul class="feat">
+          <li><span><strong>Conexión invisible:</strong> se enlaza mientras le muestras un ejemplo.</span></li>
+          <li><span><strong>Pantalla negra</strong> en tu receptor: nadie sospecha que está encendido.</span></li>
+          <li><span>El espectador <strong>no instala nada</strong>; abre una página web.</span></li>
+          <li><span>Receptor <strong>instalable</strong> y protegido con Authenticator.</span></li>
+        </ul>
+        <div class="chips"><span class="chip">2 celulares</span><span class="chip">Sin instalar</span><span class="chip">Dibujo libre</span></div>
+        <span class="video-cap">Mira cómo funciona</span>
+        <a class="video" href="https://youtu.be/x5IXAtgKlM0" target="_blank" rel="noopener" aria-label="Garabatos: instructivo en video (abre YouTube)"><img src="https://i.ytimg.com/vi/x5IXAtgKlM0/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlabel">Ver el video en YouTube</span></a>
+        <div class="price"><b>$30.000</b><span>CLP · US$30</span></div>
+        <a class="btn btn-gold" href="#acceso" data-app="Garabatos">Quiero esta app</a>
+      </div>
+    </div>
+
+    <div class="show" id="app-4">
+      <div class="show-phone"><div class="halo"></div><div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-am"></div></div></div></div>
+      <div>
+        <span class="num">04</span>
+        <h3>Astromágico</h3>
+        <div class="kind">Astrología · naipes</div>
+        <p class="pitch">El espectador pone su fecha de nacimiento y hace girar la tómbola del zodíaco. La carta que le toca ya estaba escrita en tu predicción.</p>
+        <ul class="feat">
+          <li><span><strong>Modo forzaje:</strong> cualquiera de las 52 cartas.</span></li>
+          <li><span><strong>Modo libre:</strong> la carta que salga llega en secreto a tu celular.</span></li>
+          <li><span>Receptor con <strong>pantalla de inicio falsa</strong> o pantalla negra, y letra ampliable.</span></li>
+          <li><span>Entra con una <strong>palabra mágica</strong> que tú ya conoces.</span></li>
+        </ul>
+        <div class="chips"><span class="chip">2 celulares</span><span class="chip">Baraja de 52</span><span class="chip">Zodíaco</span></div>
+        <span class="video-cap">Mira cómo funciona</span>
+        <a class="video" href="https://youtu.be/_xaZoQA0_ew" target="_blank" rel="noopener" aria-label="Astromágico: instructivo en video (abre YouTube)"><img src="https://i.ytimg.com/vi/_xaZoQA0_ew/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlabel">Ver el video en YouTube</span></a>
+        <div class="price"><b>$30.000</b><span>CLP · US$30</span></div>
+        <a class="btn btn-gold" href="#acceso" data-app="Astromágico">Quiero esta app</a>
+      </div>
+    </div>
+
+    <div class="show" id="app-5">
+      <div class="show-phone"><div class="halo"></div><div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-ts"></div></div></div></div>
+      <div>
+        <span class="num">05</span>
+        <h3>Top Songs Charts</h3>
+        <div class="kind">Música · predicción</div>
+        <p class="pitch">Un ranking con las 100 canciones más famosas de la historia. El espectador recorre la lista con total libertad y se detiene en una. Tú ya la sabías, y tú decides cómo revelarla.</p>
+        <ul class="feat">
+          <li><span><strong>Scroll libre:</strong> el espectador mueve la lista cuanto quiera.</span></li>
+          <li><span><strong>Cualquier canción</strong> de la lista puede ser la elegida, con autocompletado al escribirla.</span></li>
+          <li><span><strong>Se reinicia sola</strong> para repetirlo con otra persona.</span></li>
+          <li><span>Clásicos para todas las edades: <strong>Michael Jackson, The Beatles, Madonna, Bruno Mars</strong> y más.</span></li>
+        </ul>
+        <div class="chips"><span class="chip">1 celular</span><span class="chip">Instalable</span><span class="chip">Top 100</span></div>
+        <span class="video-cap">Mira cómo funciona</span>
+        <a class="video vert" href="https://www.youtube.com/shorts/v2ROU4rv5jc" target="_blank" rel="noopener" aria-label="Top Songs Charts: instructivo en video (abre YouTube)"><img src="https://i.ytimg.com/vi/v2ROU4rv5jc/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlabel">Ver el video en YouTube</span></a>
+        <div class="price"><b>$30.000</b><span>CLP · US$30</span></div>
+        <a class="btn btn-gold" href="#acceso" data-app="Top Songs Charts">Quiero esta app</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="acceso">
+    <div class="sec-head">
+      <h2>Acceso personal, no una tienda.</h2>
+      <p>Cada licencia se entrega de mago a mago. Así la colección sigue siendo exclusiva y los métodos no circulan.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><b>1</b><h4>Eliges tus apps</h4><p>Una, varias o la colección completa. Marca las que te interesan aquí abajo.</p></div>
+      <div class="step"><b>2</b><h4>Recibes tu licencia</h4><p>Te llega el enlace privado, tu código de acceso y el instructivo con el método completo.</p></div>
+      <div class="step"><b>3</b><h4>La instalas y actúas</h4><p>Se instala desde el navegador como una app más. Funciona en iPhone y Android.</p></div>
+    </div>
+
+    <div class="pack" id="pack">
+      <div>
+        <span class="badge">Oferta exclusiva</span>
+        <h3>Pack completo: las 5 apps.</h3>
+        <p>Toxonyq Momentum, SearchWord, Garabatos, Astromágico y Top Songs Charts, con sus instructivos.</p>
+        <div class="icons"><span class="i1">=</span><span class="i2" style="font-family:Georgia,serif">W</span><span class="i3">✎</span><span class="i4">♌︎</span><span style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff">♪</span></div>
+      </div>
+      <div class="cost">
+        <div class="old">$150.000 CLP · US$150</div>
+        <div class="now">$100.000</div>
+        <div class="usd">CLP · US$100</div>
+        <a class="btn btn-gold" href="#f" data-app="Pack completo (5 apps)">Quiero el pack completo</a>
+      </div>
+    </div>
+
+    <div class="cta">
+      <div>
+        <h2>Pide tu acceso.</h2>
+        <p>Marca las apps, escribe tu nombre y envíame el mensaje por WhatsApp o correo. Te respondo con los detalles de la licencia.</p>
+      </div>
+      <form id="f" novalidate>
+        <span id="pickLabel" style="font:600 12px var(--mono);letter-spacing:.14em;color:var(--gold)">APPS</span>
+        <div class="pick" role="group" aria-labelledby="pickLabel">
+          <input type="checkbox" id="p0" value="Pack completo (5 apps)"><label for="p0">Pack completo · $100.000 / US$100</label>
+          <input type="checkbox" id="p1" value="Toxonyq Momentum"><label for="p1">Toxonyq Momentum</label>
+          <input type="checkbox" id="p2" value="SearchWord"><label for="p2">SearchWord</label>
+          <input type="checkbox" id="p3" value="Garabatos"><label for="p3">Garabatos</label>
+          <input type="checkbox" id="p4" value="Astromágico"><label for="p4">Astromágico</label>
+          <input type="checkbox" id="p5" value="Top Songs Charts"><label for="p5">Top Songs Charts</label>
+        </div>
+        <label for="nm">Tu nombre artístico</label>
+        <input type="text" id="nm" placeholder="Ej: Mago Aurelio" autocomplete="name">
+        <div class="msg" id="msg" aria-live="polite">Marca al menos una app para armar el mensaje.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px">
+          <a class="btn btn-gold" id="wa" href="https://wa.me/56942636101?text=Hola%2C%20me%20interesa%20Purapps%20Mentiras" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>Enviar por WhatsApp</a>
+          <a class="btn btn-ghost" id="mail" href="mailto:nelsonzuniga1978@gmail.com?subject=Acceso%20Purapps%20Mentiras">Enviar por correo</a>
+          <button class="btn btn-ghost" type="submit">Copiar mensaje</button>
+        </div>
+        <div style="font:500 14px var(--mono);color:var(--muted);line-height:1.8">WhatsApp: <span style="color:var(--gold-hi)">+56 9 4263 6101</span><br>Correo: <span style="color:var(--gold-hi)">nelsonzuniga1978@gmail.com</span></div>
+        <div class="ok" id="ok" aria-live="polite"></div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <span>Purapps Mentiras · La pureza de mentir</span>
+    <span>Los métodos se entregan solo con licencia.</span>
+  </footer>
+</main>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Tómbola de Astromágico: 14 cartas, la última es 7♥ con Leo */
+  const zod = ['♈︎','♉︎','♊︎','♋︎','♌︎','♍︎','♎︎','♏︎','♐︎','♑︎','♒︎','♓︎'];
+  const deck = [['K','♠'],['3','♦'],['J','♣'],['9','♥'],['A','♠'],['5','♣'],['Q','♥'],['2','♠'],['10','♦'],['8','♣'],['4','♥'],['6','♠'],['K','♦'],['7','♥']];
+  function fillReel(root){
+    root.querySelectorAll('[data-reel]').forEach(r=>{
+      r.innerHTML = deck.map((c,i)=>{
+        const red = (c[1]==='♥'||c[1]==='♦') ? ' red':'';
+        const win = i===deck.length-1 ? ' win':'';
+        const z = i===deck.length-1 ? '♌︎' : zod[i%12];
+        return `<div class="card${red}${win}"><span>${c[0]}${c[1]}</span><span class="z">${z}</span><span class="b">${c[0]}${c[1]}</span></div>`;
+      }).join('');
+    });
+  }
+  const songs=[['Thriller','Michael Jackson'],['Like a Virgin','Madonna'],['Let It Be','The Beatles'],['Uptown Funk','Mark Ronson, Bruno Mars'],['Imagine','John Lennon'],['Hotel California','Eagles'],['Billie Jean','Michael Jackson'],['Dancing Queen','ABBA'],['Hey Jude','The Beatles'],['Rolling in the Deep','Adele'],['Smells Like Teen Spirit','Nirvana'],['Wonderwall','Oasis'],['Like a Prayer','Madonna'],['Just the Way You Are','Bruno Mars'],['Bohemian Rhapsody','Queen'],['Shape of You','Ed Sheeran'],['Yesterday','The Beatles'],['Africa','Toto'],['Respect','Aretha Franklin'],['Waterloo','ABBA']];
+  const hues=[330,20,200,45,280,160,350,60,210,10,250,140,300,30,0,190,90,260,15,120];
+  const heart='<svg class="hz" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
+  function fillSongs(root){
+    root.querySelectorAll('[data-songs]').forEach(st=>{
+      st.innerHTML=songs.map((x,i)=>`<div class="row"><span class="r">#${41+i}</span><span class="cv" style="background:linear-gradient(135deg,hsl(${hues[i]} 70% 55%),hsl(${(hues[i]+60)%360} 60% 30%))"></span><span class="tt"><b>${x[0]}</b><span>${x[1]}</span></span>${heart}</div>`).join('');
+    });
+  }
+  function mount(host, id){
+    host.innerHTML = '';
+    host.appendChild(document.getElementById(id).content.cloneNode(true));
+    fillReel(host); fillSongs(host);
+  }
+
+  /* Celulares de la vitrina */
+  document.querySelectorAll('.host[data-scene]').forEach(h=>mount(h, h.dataset.scene));
+
+  /* Celular del héroe: rota entre las 5 apps */
+  const scenes = [['s-calc','Toxonyq Momentum'],['s-sw','SearchWord'],['s-gb','Garabatos'],['s-am','Astromágico'],['s-ts','Top Songs Charts']];
+  const heroHost = document.querySelector('#heroScreen .host');
+  const nameEl = document.getElementById('heroName');
+  const dots = document.getElementById('dots');
+  let cur = 0, timer;
+  scenes.forEach((s,i)=>{
+    const b=document.createElement('button');
+    b.setAttribute('aria-label','Mostrar '+s[1]);
+    b.onclick=()=>{show(i);restart();};
+    dots.appendChild(b);
+  });
+  function show(i){
+    cur=i; mount(heroHost, scenes[i][0]); nameEl.textContent=scenes[i][1];
+    [...dots.children].forEach((d,j)=>d.classList.toggle('on',j===i));
+  }
+  function restart(){ clearInterval(timer); if(!reduce) timer=setInterval(()=>show((cur+1)%scenes.length), cur===0?10000:9000); }
+  show(0); restart();
+
+  /* Inclinación 3D con el mouse */
+  const stage=document.getElementById('stage'), tilt=document.getElementById('tilt');
+  if(!reduce){
+    stage.addEventListener('pointermove',e=>{
+      if(e.pointerType!=='mouse') return;
+      const r=stage.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+      tilt.style.transform=`rotateY(${x*22}deg) rotateX(${-y*16}deg)`;
+    });
+    stage.addEventListener('pointerleave',()=>tilt.style.transform='');
+  }
+
+  /* Polvo dorado */
+  const cv=document.getElementById('dust'), ctx=cv.getContext('2d');
+  let W,H,P=[];
+  function size(){ W=cv.width=innerWidth*devicePixelRatio; H=cv.height=innerHeight*devicePixelRatio;
+    P=Array.from({length:Math.min(90,Math.floor(innerWidth/14))},()=>({x:Math.random()*W,y:Math.random()*H,r:(Math.random()*1.6+.3)*devicePixelRatio,s:Math.random()*.35+.08,t:Math.random()*6.28})); }
+  size(); addEventListener('resize',size);
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    for(const p of P){
+      p.y-=p.s*devicePixelRatio; p.t+=.02; if(p.y<-5){p.y=H+5;p.x=Math.random()*W;}
+      const a=.25+.35*Math.sin(p.t);
+      ctx.beginPath(); ctx.arc(p.x+Math.sin(p.t)*6,p.y,p.r,0,6.28);
+      ctx.fillStyle=`rgba(232,194,106,${a})`; ctx.fill();
+    }
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  frame();
+
+  /* Formulario de acceso */
+  const f=document.getElementById('f'), msg=document.getElementById('msg'), ok=document.getElementById('ok'), nm=document.getElementById('nm');
+  const boxes=[...f.querySelectorAll('input[type=checkbox]')];
+  function build(){
+    const sel=boxes.filter(b=>b.checked).map(b=>b.value);
+    if(!sel.length){ msg.textContent='Marca al menos una app para armar el mensaje.'; return ''; }
+    const t=`Hola, soy ${nm.value.trim()||'[tu nombre]'}. Me interesa Purapps Mentiras:\n• ${sel.join('\n• ')}\n¿Cómo obtengo la licencia?`;
+    msg.textContent=t;
+    document.getElementById('wa').href='https://wa.me/56942636101?text='+encodeURIComponent(t);
+    document.getElementById('mail').href='mailto:nelsonzuniga1978@gmail.com?subject='+encodeURIComponent('Acceso Purapps Mentiras')+'&body='+encodeURIComponent(t);
+    return t;
+  }
+  f.addEventListener('input',build);
+  document.querySelectorAll('[data-app]').forEach(a=>a.addEventListener('click',()=>{
+    const b=boxes.find(x=>x.value===a.dataset.app); if(b){b.checked=true;build();}
+  }));
+  f.addEventListener('submit',async e=>{
+    e.preventDefault(); const t=build();
+    if(!t){ ok.textContent='Primero marca una app.'; return; }
+    try{ await navigator.clipboard.writeText(t); ok.textContent='Mensaje copiado. Pégalo en WhatsApp o en un correo.'; }
+    catch(err){ ok.textContent='No se pudo copiar automáticamente: selecciona el texto de arriba y cópialo.'; }
+  });
+})();
+</script>
+</body>
+</html>
