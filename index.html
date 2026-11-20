@@ -653,13 +653,13 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
 
   /* Tómbola de Astromágico: 14 cartas, la última es 7♥ con Leo */
   const zod = ['♈︎','♉︎','♊︎','♋︎','♌︎','♍︎','♎︎','♏︎','♐︎','♑︎','♒︎','♓︎'];
-  const deck = [['K','♠'],['3','♦'],['J','♣'],['9','♥'],['A','♠'],['5','♣'],['Q','♥'],['2','♠'],['10','♦'],['8','♣'],['4','♥'],['6','♠'],['K','♦'],['7','♥']];
+  const deck = [['K','♠'],['3','♦'],['J','♣'],['9','♥'],['A','♠'],['5','♣'],['Q','♥'],['2','♠'],['10','♦'],['8','♣'],['4','♥'],['6','♠'],['K','♦'],['7','♥'],['J','♠'],['2','♦'],['Q','♣']];
   function fillReel(root){
     root.querySelectorAll('[data-reel]').forEach(r=>{
       r.innerHTML = deck.map((c,i)=>{
         const red = (c[1]==='♥'||c[1]==='♦') ? ' red':'';
-        const win = i===deck.length-1 ? ' win':'';
-        const z = i===deck.length-1 ? '♌︎' : zod[i%12];
+        const win = i===13 ? ' win':'';
+        const z = i===13 ? '♌︎' : zod[i%12];
         return `<div class="card${red}${win}"><span>${c[0]}${c[1]}</span><span class="z">${z}</span><span class="b">${c[0]}${c[1]}</span></div>`;
       }).join('');
     });
