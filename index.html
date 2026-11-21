@@ -256,6 +256,17 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:16px;paddi
 .other .video.vert{max-width:180px;margin-bottom:18px}
 .other .btn{padding:12px 18px;font-size:14px}
 @media (max-width:620px){.other{grid-template-columns:1fr;justify-items:center;text-align:left}}
+/* Otras apps: vista aparte */
+#otras{display:none}
+#otras:target{display:block;position:fixed;inset:0;z-index:60;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:radial-gradient(80% 50% at 50% 0%,#1f1440,var(--ink) 70%);padding:0 0 80px}
+#otras .wrap-in{max-width:1180px;margin:0 auto;padding:0 24px}
+.back{display:inline-flex;align-items:center;gap:8px;margin:24px 0 40px;font:600 14px var(--body);color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:10px 16px}
+.back:hover{color:var(--gold-hi);border-color:var(--gold)}
+.more{margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:20px;border:1px dashed var(--gold);border-radius:22px;padding:24px 26px;text-decoration:none;background:rgba(232,194,106,.04);transition:.25s}
+.more:hover{background:rgba(232,194,106,.1);transform:translateY(-3px)}
+.more b{display:block;font:800 26px var(--display)}
+.more span{color:var(--muted);font-size:15px}
+.more i{font-style:normal;font:800 32px var(--display);color:var(--gold)}
 /* MARQUEE */
 .marquee{position:relative;z-index:1;border-block:1px solid var(--line);overflow:hidden;padding:16px 0;background:rgba(22,16,40,.6)}
 .marquee div{display:flex;gap:40px;width:max-content;animation:marq 32s linear infinite;font:700 15px var(--display);letter-spacing:.2em;color:var(--muted)}
@@ -552,6 +563,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
       <a class="tile" href="#app-5"><span class="n">05</span><span class="ico i5" style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff;border:0">♪</span><h3>Top Songs Charts</h3><p>Eligen una canción del ranking. Tú decides la presentación.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
       <a class="tile" href="#app-6"><span class="n">06</span><span class="ico i6" style="background:radial-gradient(circle at 35% 30%,#fff2c4,#d9a84a 55%,#6e4a14);color:#1d1408;font-family:Georgia,serif">◷</span><h3>Lost Time</h3><p>Un reloj de bolsillo que marca la hora elegida.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
     </div>
+    <a class="more" href="#otras"><div><b>Otras apps</b><span>Más efectos fuera del pack. Toca para verlas.</span></div><i>→</i></a>
   </section>
 
   <section id="apps" style="padding-top:20px">
@@ -681,7 +693,9 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
     </div>
   </section>
 
-  <section id="otras">
+  <section id="otras" aria-label="Otras apps">
+   <div class="wrap-in">
+    <a class="back" href="#coleccion">← Volver al catálogo</a>
     <div class="sec-head">
       <h2>Otras apps.</h2>
       <p>Más efectos de la misma línea, fuera del pack.</p>
@@ -699,6 +713,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
         </div>
       </div>
     </div>
+   </div>
   </section>
 
   <section id="acceso">
