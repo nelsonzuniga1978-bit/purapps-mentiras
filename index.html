@@ -267,6 +267,24 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:16px;paddi
 .more b{display:block;font:800 26px var(--display)}
 .more span{color:var(--muted);font-size:15px}
 .more i{font-style:normal;font:800 32px var(--display);color:var(--gold)}
+/* --- Escena: Neural --- */
+.nr{background:#02030a;color:#fff}
+.nr .statusbar{color:#444}
+.nr svg{position:absolute;left:0;top:18%;width:100%;height:64%}
+.nr-waves{animation:nrwaves 9s infinite}
+.nr-waves path{fill:none;stroke-width:2.2;stroke-linecap:round;filter:drop-shadow(0 0 4px currentColor);animation:nrshift 1.6s linear infinite}
+.nr-waves path:nth-child(2){animation-duration:2.1s}.nr-waves path:nth-child(3){animation-duration:1.2s}
+@keyframes nrshift{to{transform:translateX(-80px)}}
+@keyframes nrwaves{0%,6%{opacity:0}10%,36%{opacity:1}42%,72%{opacity:0}78%,92%{opacity:.9}100%{opacity:0}}
+.nr-face{opacity:0;animation:nrface 9s infinite}
+.nr-face *{fill:none;stroke:#36f1ff;stroke-width:2.4;stroke-linecap:round;filter:drop-shadow(0 0 5px #36f1ff)}
+@keyframes nrface{0%,38%{opacity:0}43%,54%{opacity:1}58%,100%{opacity:0}}
+.nr-card{position:absolute;left:50%;top:50%;width:46%;aspect-ratio:5/7;transform:translate(-50%,-50%);border-radius:10px;background:#fbfaf6;color:#111;font:700 18px Georgia,serif;box-shadow:0 0 30px rgba(54,241,255,.6),0 0 0 2px rgba(54,241,255,.6);opacity:0;animation:nrcard 9s infinite}
+.nr-card .c{position:absolute;top:7px;left:8px;line-height:.95;text-align:center}
+.nr-card .c.br{top:auto;left:auto;bottom:7px;right:8px;transform:rotate(180deg)}
+.nr-card .pip{position:absolute;inset:0;display:grid;place-items:center;font-size:52px}
+@keyframes nrcard{0%,58%{opacity:0;transform:translate(-50%,-50%) scale(.85)}63%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}77%,100%{opacity:0}}
+.nr-cap{position:absolute;bottom:7%;left:0;right:0;text-align:center;font:600 9px var(--mono);letter-spacing:.28em;color:#3a6c74}
 /* MARQUEE */
 .marquee{position:relative;z-index:1;border-block:1px solid var(--line);overflow:hidden;padding:16px 0;background:rgba(22,16,40,.6)}
 .marquee div{display:flex;gap:40px;width:max-content;animation:marq 32s linear infinite;font:700 15px var(--display);letter-spacing:.2em;color:var(--muted)}
@@ -505,6 +523,27 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
   </div>
 </template>
 
+<template id="s-nr">
+  <div class="scene nr">
+    <div class="statusbar"><span>9:41</span><span>●●● ▮</span></div>
+    <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <g class="nr-waves">
+        <path style="color:#36f1ff" stroke="#36f1ff" d="M-10,132.6 L-4,142.2 L2,154.0 L8,164.6 L14,171.0 L20,171.3 L26,165.4 L32,155.1 L38,143.2 L44,133.4 L50,128.3 L56,129.6 L62,136.7 L68,147.8 L74,159.5 L80,168.4 L86,172.0 L92,169.2 L98,160.8 L104,149.3 L110,138.0 L116,130.2 L122,128.1 L128,132.4 L134,141.7 L140,153.5 L146,164.3 L152,170.9 L158,171.4 L164,165.8 L170,155.5 L176,143.7 L182,133.7 L188,128.4 L194,129.4 L200,136.4 L206,147.3 L212,159.0 L218,168.1 L224,172.0 L230,169.4 L236,161.2 L242,149.8 L248,138.4 L254,130.4 L260,128.1 L266,132.1 L272,141.3 L278,153.1 L284,163.9 L290,170.7 L296,171.5"/>
+        <path style="color:#b45cff" stroke="#b45cff" d="M-10,151.0 L-4,161.2 L2,163.7 L8,156.7 L14,145.1 L20,136.9 L26,137.7 L32,147.1 L38,158.4 L44,164.0 L50,159.9 L56,148.9 L62,138.8 L68,136.3 L74,143.4 L80,155.0 L86,163.1 L92,162.2 L98,152.9 L104,141.5 L110,136.0 L116,140.2 L122,151.1 L128,161.3 L134,163.7 L140,156.6 L146,145.0 L152,136.8 L158,137.8 L164,147.2 L170,158.5 L176,164.0 L182,159.8 L188,148.8 L194,138.7 L200,136.4 L206,143.4 L212,155.1 L218,163.2 L224,162.2 L230,152.8 L236,141.5 L242,136.0 L248,140.2 L254,151.2 L260,161.3 L266,163.6 L272,156.5 L278,144.9 L284,136.8 L290,137.8 L296,147.3"/>
+        <path style="color:#ff3fa4" stroke="#ff3fa4" d="M-10,170.8 L-4,161.4 L2,150.5 L8,139.5 L14,129.9 L20,123.2 L26,120.1 L32,121.2 L38,126.3 L44,134.8 L50,145.3 L56,156.5 L62,166.7 L68,174.7 L74,179.2 L80,179.7 L86,176.0 L92,168.7 L98,158.9 L104,147.7 L110,136.9 L116,128.0 L122,122.0 L128,120.0 L134,122.1 L140,128.1 L146,137.2 L152,148.0 L158,159.1 L164,168.9 L170,176.2 L176,179.7 L182,179.2 L188,174.5 L194,166.5 L200,156.2 L206,145.0 L212,134.5 L218,126.2 L224,121.2 L230,120.1 L236,123.3 L242,130.1 L248,139.7 L254,150.8 L260,161.7 L266,171.0 L272,177.4 L278,180.0 L284,178.4 L290,172.9 L296,164.1"/>
+      </g>
+      <g class="nr-face">
+        <ellipse cx="100" cy="140" rx="48" ry="60"/>
+        <path d="M80 125 q6 -5 12 0"/><path d="M108 125 q6 -5 12 0"/>
+        <circle cx="100" cy="170" r="6"/>
+        <path d="M100 205 L100 150"/><path d="M100 150 q0 -6 5 -6 q5 0 5 6 L110 200"/>
+      </g>
+    </svg>
+    <div class="nr-card"><div class="c">3<br>♣</div><div class="pip">♣</div><div class="c br">3<br>♣</div></div>
+    <div class="nr-cap">EN LA FRENTE</div>
+  </div>
+</template>
+
 <template id="s-cs">
   <div class="scene cs">
     <div class="lock"></div>
@@ -712,6 +751,17 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
           <a class="btn btn-gold" href="#acceso" data-app="The Artist">Quiero esta app</a>
         </div>
       </div>
+      <div class="other" id="app-neural">
+        <div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-nr"></div></div></div>
+        <div>
+          <h3>Neural</h3>
+          <div class="kind">Mentalismo · en la frente</div>
+          <p>El espectador se pone el celular en la frente. Aparecen ondas de neón, un rostro que pide silencio y, al final, la carta, el número o la palabra que tú preparaste.</p>
+          <a class="video vert" href="https://www.youtube.com/shorts/HGwigl-52Xs" target="_blank" rel="noopener" aria-label="Neural: instructivo en video (abre YouTube)"><img src="https://i.ytimg.com/vi/HGwigl-52Xs/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlabel">Ver el video</span></a>
+          <div class="price"><b>$20.000</b><span>CLP · US$20</span></div>
+          <a class="btn btn-gold" href="#acceso" data-app="Neural">Quiero esta app</a>
+        </div>
+      </div>
     </div>
    </div>
   </section>
@@ -758,6 +808,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
           <input type="checkbox" id="p5" value="Top Songs Charts"><label for="p5">Top Songs Charts</label>
           <input type="checkbox" id="p6" value="Lost Time"><label for="p6">Lost Time</label>
           <input type="checkbox" id="p7" value="The Artist"><label for="p7">The Artist</label>
+          <input type="checkbox" id="p8" value="Neural"><label for="p8">Neural</label>
         </div>
         <label for="nm">Tu nombre artístico</label>
         <input type="text" id="nm" placeholder="Ej: Mago Aurelio" autocomplete="name">
