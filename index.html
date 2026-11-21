@@ -285,6 +285,12 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:16px;paddi
 .nr-card .pip{position:absolute;inset:0;display:grid;place-items:center;font-size:52px}
 @keyframes nrcard{0%,58%{opacity:0;transform:translate(-50%,-50%) scale(.85)}63%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}77%,100%{opacity:0}}
 .nr-cap{position:absolute;bottom:7%;left:0;right:0;text-align:center;font:600 9px var(--mono);letter-spacing:.28em;color:#3a6c74}
+/* Celular horizontal con grabación real */
+.other.wide{grid-template-columns:1fr}
+.phone-land{width:100%;max-width:460px;aspect-ratio:19.3/9;border-radius:38px;padding:9px;background:linear-gradient(145deg,#3a3448,#0d0b14 40%,#1d1928);box-shadow:0 0 0 1px #4a4258 inset,0 30px 70px -20px rgba(0,0,0,.9),0 0 60px -20px rgba(54,241,255,.35);position:relative;justify-self:center}
+.phone-land .scr{position:relative;width:100%;height:100%;border-radius:30px;overflow:hidden;background:#000}
+.phone-land .scr::before{content:"";position:absolute;left:2.4%;top:50%;transform:translateY(-50%);width:3.2%;height:31%;border-radius:20px;background:#000;z-index:2}
+.phone-land video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 /* MARQUEE */
 .marquee{position:relative;z-index:1;border-block:1px solid var(--line);overflow:hidden;padding:16px 0;background:rgba(22,16,40,.6)}
 .marquee div{display:flex;gap:40px;width:max-content;animation:marq 32s linear infinite;font:700 15px var(--display);letter-spacing:.2em;color:var(--muted)}
@@ -751,8 +757,8 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
           <a class="btn btn-gold" href="#acceso" data-app="The Artist">Quiero esta app</a>
         </div>
       </div>
-      <div class="other" id="app-neural">
-        <div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-nr"></div></div></div>
+      <div class="other wide" id="app-neural">
+        <div class="phone-land"><div class="scr"><video src="neural-demo.mp4" poster="neural-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Grabación real de Neural funcionando"></video></div></div>
         <div>
           <h3>Neural</h3>
           <div class="kind">Mentalismo · en la frente</div>
@@ -895,6 +901,10 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
     });
     stage.addEventListener('pointerleave',()=>tilt.style.transform='');
   }
+
+  /* Videos de demostración: asegurar reproducción en celular */
+  function playDemos(){ document.querySelectorAll('video[autoplay]').forEach(v=>{ v.muted=true; const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }); }
+  playDemos(); addEventListener('hashchange',()=>setTimeout(playDemos,50)); document.addEventListener('touchstart',playDemos,{once:true,passive:true});
 
   /* Polvo dorado */
   const cv=document.getElementById('dust'), ctx=cv.getContext('2d');
