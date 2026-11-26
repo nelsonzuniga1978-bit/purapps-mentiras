@@ -156,7 +156,7 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:16px;paddi
 .gb-recv small{position:absolute;bottom:7%;font:500 9px var(--mono);color:#555;letter-spacing:.12em}
 @keyframes recv{0%,56%{opacity:0}61%,92%{opacity:1}97%,100%{opacity:0}}
 
-/* --- Escena 4: Astromágico --- */
+/* --- Escena: tómbola (sin uso) --- */
 .am{background:radial-gradient(120% 80% at 50% 0%,#3a1d6e,#120a26 60%,#07040f);color:#fff;text-align:center}
 .am .statusbar{color:#fff}
 .am-h{position:absolute;top:13%;left:0;right:0}
@@ -486,17 +486,6 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
   </div>
 </template>
 
-<template id="s-am">
-  <div class="scene am">
-    <div class="statusbar"><span>14:41</span><span>●●● ▮</span></div>
-    <div class="am-h"><small>ASTROMÁGICO</small><div>Tu carta del destino</div></div>
-    <div class="am-pointer"></div>
-    <div class="am-wheel"><div class="reel" data-reel></div></div>
-    <div class="am-res"><b>7 de corazones</b><span>Leo · nacido un 4 de agosto</span></div>
-    <div class="am-zod">♈︎♉︎♊︎♋︎♌︎♍︎♎︎♏︎♐︎♑︎♒︎♓︎</div>
-  </div>
-</template>
-
 <template id="s-ts">
   <div class="scene ts">
     <div class="statusbar"><span>14:41</span><span>●●● ▮</span></div>
@@ -610,9 +599,8 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
       <a class="tile" href="#app-1"><span class="n">01</span><span class="ico i1">=</span><h3>Toxonyq Momentum</h3><p>La calculadora que predice la hora exacta.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
       <a class="tile" href="#app-2"><span class="n">02</span><span class="ico i2">W</span><h3>SearchWord</h3><p>Una enciclopedia que te muestra lo que buscaron.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
       <a class="tile" href="#app-3"><span class="n">03</span><span class="ico i3">✎</span><h3>Garabatos</h3><p>Dibujan en su celular. Lo ves en el tuyo.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
-      <a class="tile" href="#app-4"><span class="n">04</span><span class="ico i4">♌︎</span><h3>Astromágico</h3><p>El zodíaco elige una carta. Tú la sabías.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
-      <a class="tile" href="#app-5"><span class="n">05</span><span class="ico i5" style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff;border:0">♪</span><h3>Top Songs Charts</h3><p>Eligen una canción del ranking. Tú decides la presentación.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
-      <a class="tile" href="#app-6"><span class="n">06</span><span class="ico i6" style="background:radial-gradient(circle at 35% 30%,#fff2c4,#d9a84a 55%,#6e4a14);color:#1d1408;font-family:Georgia,serif">◷</span><h3>Lost Time</h3><p>Un reloj de bolsillo que marca la hora elegida.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
+      <a class="tile" href="#app-5"><span class="n">04</span><span class="ico i5" style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff;border:0">♪</span><h3>Top Songs Charts</h3><p>Eligen una canción del ranking. Tú decides la presentación.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
+      <a class="tile" href="#app-6"><span class="n">05</span><span class="ico i6" style="background:radial-gradient(circle at 35% 30%,#fff2c4,#d9a84a 55%,#6e4a14);color:#1d1408;font-family:Georgia,serif">◷</span><h3>Lost Time</h3><p>Un reloj de bolsillo que marca la hora elegida.</p><span class="tag"><b>$30.000</b> CLP · US$30</span></a>
     </div>
   </section>
 
@@ -680,31 +668,10 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
       </div>
     </div>
 
-    <div class="show" id="app-4">
-      <div class="show-phone"><div class="halo"></div><div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-am"></div></div></div></div>
-      <div>
-        <span class="num">04</span>
-        <h3>Astromágico</h3>
-        <div class="kind">Astrología · naipes</div>
-        <p class="pitch">El espectador pone su fecha de nacimiento y hace girar la tómbola del zodíaco. La carta que le toca ya estaba escrita en tu predicción.</p>
-        <ul class="feat">
-          <li><span><strong>Modo forzaje:</strong> cualquiera de las 52 cartas.</span></li>
-          <li><span><strong>Modo libre:</strong> la carta que salga llega en secreto a tu celular.</span></li>
-          <li><span>Receptor con <strong>pantalla de inicio falsa</strong> o pantalla negra, y letra ampliable.</span></li>
-          <li><span>Entra con una <strong>palabra mágica</strong> que tú ya conoces.</span></li>
-        </ul>
-        <div class="chips"><span class="chip">2 celulares</span><span class="chip">Baraja de 52</span><span class="chip">Zodíaco</span></div>
-        <span class="video-cap">Mira cómo funciona</span>
-        <a class="video" href="https://youtu.be/_xaZoQA0_ew" target="_blank" rel="noopener" aria-label="Astromágico: instructivo en video (abre YouTube)"><img src="https://i.ytimg.com/vi/_xaZoQA0_ew/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlabel">Ver el video en YouTube</span></a>
-        <div class="price"><b>$30.000</b><span>CLP · US$30</span></div>
-        <a class="btn btn-gold" href="#acceso" data-app="Astromágico">Quiero esta app</a>
-      </div>
-    </div>
-
     <div class="show" id="app-5">
       <div class="show-phone"><div class="halo"></div><div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-ts"></div></div></div></div>
       <div>
-        <span class="num">05</span>
+        <span class="num">04</span>
         <h3>Top Songs Charts</h3>
         <div class="kind">Música · predicción</div>
         <p class="pitch">Un ranking con las 100 canciones más famosas de la historia. El espectador recorre la lista con total libertad y se detiene en una. Tú ya la sabías, y tú decides cómo revelarla.</p>
@@ -724,7 +691,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
       <div class="show" id="app-6">
       <div class="show-phone"><div class="halo"></div><div class="phone"><div class="screen"><div class="island"></div><div class="glare"></div><div class="host" data-scene="s-lt"></div></div></div></div>
       <div>
-        <span class="num">06</span>
+        <span class="num">05</span>
         <h3>Lost Time</h3>
         <div class="kind">Reloj · predicción</div>
         <p class="pitch">Un reloj de bolsillo antiguo en el celular del propio espectador. Lo deja boca abajo sobre la mesa y, al darlo vuelta, las agujas marcan exactamente la hora elegida.</p>
@@ -813,15 +780,15 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
     <div class="pack" id="pack">
       <div>
         <span class="badge">Oferta exclusiva</span>
-        <h3>Pack completo: las 6 apps.</h3>
-        <p>Toxonyq Momentum, SearchWord, Garabatos, Astromágico, Top Songs Charts y Lost Time, con sus instructivos.</p>
-        <div class="icons"><span class="i1">=</span><span class="i2" style="font-family:Georgia,serif">W</span><span class="i3">✎</span><span class="i4">♌︎</span><span style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff">♪</span><span style="background:radial-gradient(circle at 35% 30%,#fff2c4,#d9a84a 55%,#6e4a14);color:#1d1408;font-family:Georgia,serif">◷</span></div>
+        <h3>Pack completo: las 5 apps.</h3>
+        <p>Toxonyq Momentum, SearchWord, Garabatos, Top Songs Charts y Lost Time, con sus instructivos.</p>
+        <div class="icons"><span class="i1">=</span><span class="i2" style="font-family:Georgia,serif">W</span><span class="i3">✎</span><span style="background:linear-gradient(145deg,#ff4d6d,#5b1530);color:#fff">♪</span><span style="background:radial-gradient(circle at 35% 30%,#fff2c4,#d9a84a 55%,#6e4a14);color:#1d1408;font-family:Georgia,serif">◷</span></div>
       </div>
       <div class="cost">
-        <div class="old">$180.000 CLP · US$180</div>
+        <div class="old">$150.000 CLP · US$150</div>
         <div class="now">$100.000</div>
         <div class="usd">CLP · US$100</div>
-        <a class="btn btn-gold" href="#f" data-app="Pack completo (6 apps)">Quiero el pack completo</a>
+        <a class="btn btn-gold" href="#f" data-app="Pack completo (5 apps)">Quiero el pack completo</a>
       </div>
     </div>
 
@@ -833,11 +800,10 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
       <form id="f" novalidate>
         <span id="pickLabel" style="font:600 12px var(--mono);letter-spacing:.14em;color:var(--gold)">APPS</span>
         <div class="pick" role="group" aria-labelledby="pickLabel">
-          <input type="checkbox" id="p0" value="Pack completo (6 apps)"><label for="p0">Pack completo · $100.000 / US$100</label>
+          <input type="checkbox" id="p0" value="Pack completo (5 apps)"><label for="p0">Pack completo · $100.000 / US$100</label>
           <input type="checkbox" id="p1" value="Toxonyq Momentum"><label for="p1">Toxonyq Momentum</label>
           <input type="checkbox" id="p2" value="SearchWord"><label for="p2">SearchWord</label>
           <input type="checkbox" id="p3" value="Garabatos"><label for="p3">Garabatos</label>
-          <input type="checkbox" id="p4" value="Astromágico"><label for="p4">Astromágico</label>
           <input type="checkbox" id="p5" value="Top Songs Charts"><label for="p5">Top Songs Charts</label>
           <input type="checkbox" id="p6" value="Lost Time"><label for="p6">Lost Time</label>
           <input type="checkbox" id="p7" value="The Artist"><label for="p7">The Artist</label>
@@ -870,7 +836,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Tómbola de Astromágico: 14 cartas, la última es 7♥ con Leo */
+  /* Tómbola de cartas (sin uso) */
   const zod = ['♈︎','♉︎','♊︎','♋︎','♌︎','♍︎','♎︎','♏︎','♐︎','♑︎','♒︎','♓︎'];
   const deck = [['K','♠'],['3','♦'],['J','♣'],['9','♥'],['A','♠'],['5','♣'],['Q','♥'],['2','♠'],['10','♦'],['8','♣'],['4','♥'],['6','♠'],['K','♦'],['7','♥'],['J','♠'],['2','♦'],['Q','♣']];
   function fillReel(root){
@@ -901,7 +867,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;display:flex;justif
   document.querySelectorAll('.host[data-scene]').forEach(h=>mount(h, h.dataset.scene));
 
   /* Celular del héroe: rota entre las 5 apps */
-  const scenes = [['s-calc','Toxonyq Momentum'],['s-sw','SearchWord'],['s-gb','Garabatos'],['s-am','Astromágico'],['s-ts','Top Songs Charts'],['s-lt','Lost Time']];
+  const scenes = [['s-calc','Toxonyq Momentum'],['s-sw','SearchWord'],['s-gb','Garabatos'],['s-ts','Top Songs Charts'],['s-lt','Lost Time']];
   const heroHost = document.querySelector('#heroScreen .host');
   const nameEl = document.getElementById('heroName');
   const dots = document.getElementById('dots');
